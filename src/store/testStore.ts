@@ -4,6 +4,7 @@
 
 import { create } from "zustand";
 import { MCQ, Subject, generateTest } from "../data/mcqs";
+import { saveStudentToFirebase, getStudentsFromFirebase, deleteStudentFromFirebase } from "../lib/firebase";
 
 export type AppPage = "landing" | "test" | "loading" | "surprise" | "result" | "review" | "admin";
 
@@ -63,6 +64,7 @@ interface TestStore {
   deleteStudent: (id: string) => void;
   goToLanding: () => void;
   goToReview: () => void;
+  fetchStudents: () => Promise<void>;
 
   // Result
   finalScore: number;
@@ -106,20 +108,9 @@ const computeResults = (
   };
 };
 
-// Load persisted students from localStorage
-const loadStudents = () => {
-  try {
-    const s = localStorage.getItem("mdcat_students");
-    return s ? JSON.parse(s) : [];
-  } catch {
-    return [];
-  }
-};
-
+// Students are now fetched asynchronously from Firebase
 const saveStudents = (students: TestStore["students"]) => {
-  try {
-    localStorage.setItem("mdcat_students", JSON.stringify(students));
-  } catch {}
+  // Legacy local storage save fallback removed
 };
 
 const loadSurpriseSound = (): string | null => {
@@ -140,7 +131,7 @@ export const useTestStore = create<TestStore>((set, get) => ({
   timerActive: false,
   adminLoggedIn: false,
   surpriseSound: loadSurpriseSound(),
-  students: loadStudents(),
+  students: [], // Fetched on demand
   finalScore: 0,
   finalPercentage: 0,
   subjectScores: [],
@@ -209,12 +200,15 @@ export const useTestStore = create<TestStore>((set, get) => ({
       id: Date.now().toString(),
       name: studentName,
       date: new Date().toLocaleString(),
+      timestamp: Date.now(),
       score: finalScore,
       percentage: finalPercentage,
       subjectScores,
     };
     const updatedStudents = [...students, newStudent];
-    saveStudents(updatedStudents);
+    
+    // Save to Firebase asynchronously
+    saveStudentToFirebase(newStudent);
 
     set({
       timerActive: false,
@@ -251,8 +245,13 @@ export const useTestStore = create<TestStore>((set, get) => ({
   deleteStudent: (id) => {
     const { students } = get();
     const updatedStudents = students.filter((s) => s.id !== id);
-    saveStudents(updatedStudents);
     set({ students: updatedStudents });
+    deleteStudentFromFirebase(id);
+  },
+
+  fetchStudents: async () => {
+    const students = await getStudentsFromFirebase();
+    set({ students });
   },
 
   // Go to review page (preserves questions & answers)

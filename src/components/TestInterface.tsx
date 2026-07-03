@@ -38,6 +38,40 @@ export default function TestInterface() {
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Anti-cheat
+  const [warnings, setWarnings] = useState(0);
+  const [showWarningModal, setShowWarningModal] = useState(false);
+
+  useEffect(() => {
+    // Attempt fullscreen on mount
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen().catch(() => console.log("Fullscreen request denied"));
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setWarnings((prev) => {
+          const newWarnings = prev + 1;
+          if (newWarnings >= 3) {
+            submitTest(); // Auto submit on 3rd strike
+          } else {
+            setShowWarningModal(true);
+          }
+          return newWarnings;
+        });
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (document.exitFullscreen && document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+    };
+  }, [submitTest]);
+
   // Timer
   useEffect(() => {
     timerRef.current = setInterval(() => {
@@ -419,6 +453,45 @@ export default function TestInterface() {
                   Submit Now
                 </button>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* ── ANTI-CHEAT WARNING MODAL ── */}
+      <AnimatePresence>
+        {showWarningModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-red-900/90 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 30 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 30 }}
+              className="bg-[#0d1426] border-2 border-red-500 rounded-3xl p-6 sm:p-8 w-full max-w-md shadow-2xl text-center"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-red-500/20 border border-red-500 flex items-center justify-center mx-auto mb-4 animate-pulse">
+                <AlertTriangle className="w-8 h-8 text-red-500" />
+              </div>
+              <h3 className="text-2xl font-black text-red-500 mb-2">WARNING {warnings}/3</h3>
+              <p className="text-slate-300 text-sm mb-6 leading-relaxed">
+                You have switched tabs or exited the test window. This is strictly prohibited. 
+                If you do this <span className="text-white font-bold">{3 - warnings} more time{3 - warnings > 1 ? 's' : ''}</span>, your test will be automatically submitted and cancelled.
+              </p>
+              <button
+                onClick={() => {
+                  setShowWarningModal(false);
+                  const elem = document.documentElement;
+                  if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(() => {});
+                  }
+                }}
+                className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-500 font-bold transition-all text-sm text-white shadow-lg shadow-red-900/50"
+              >
+                I Understand, Return to Test
+              </button>
             </motion.div>
           </motion.div>
         )}

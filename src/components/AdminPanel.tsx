@@ -3,7 +3,7 @@
 // Mobile Responsive: bottom tab bar on mobile
 // ============================================================
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useTestStore } from "../store/testStore";
 import { ALL_MCQS, SUBJECT_DISTRIBUTION } from "../data/mcqs";
+import { clearAllStudentsFromFirebase } from "../lib/firebase";
 
 type AdminTab = "dashboard" | "students" | "mcqs" | "sound" | "settings";
 
@@ -106,7 +107,7 @@ function AdminLogin() {
 
 // ── Admin Dashboard ─────────────────────────────────────────
 function AdminDashboard() {
-  const { adminLogout, surpriseSound, setSurpriseSound, students, deleteStudent, goToLanding } = useTestStore();
+  const { adminLogout, surpriseSound, setSurpriseSound, students, deleteStudent, goToLanding, fetchStudents } = useTestStore();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<AdminTab>("dashboard");
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -115,6 +116,10 @@ function AdminDashboard() {
   const [selectedStudent, setSelectedStudent] = useState<typeof students[0] | null>(null);
   const [mcqPage, setMcqPage] = useState(0);
   const MCQ_PER_PAGE = 30;
+
+  useEffect(() => {
+    fetchStudents();
+  }, [fetchStudents]);
 
   const avgScore = students.length
     ? Math.round(students.reduce((acc, s) => acc + s.percentage, 0) / students.length)
@@ -658,11 +663,9 @@ function AdminDashboard() {
                   <h3 className="font-bold mb-2 text-rose-400 text-sm sm:text-base">Danger Zone</h3>
                   <p className="text-slate-500 text-xs sm:text-sm mb-3">This will permanently delete all student data.</p>
                   <button
-                    onClick={() => {
-                      if (confirm("Are you sure? This will delete ALL student records permanently.")) {
-                        localStorage.removeItem("mdcat_students");
-                        // ✅ Fixed: Zustand state reset via goToLanding (resets students via store reload)
-                        // Re-initialize store students
+                    onClick={async () => {
+                      if (confirm("Are you sure? This will delete ALL student records permanently from the database.")) {
+                        await clearAllStudentsFromFirebase();
                         useTestStore.setState({ students: [] });
                         goToLanding();
                         navigate("/");
