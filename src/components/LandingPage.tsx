@@ -130,9 +130,9 @@ export default function LandingPage() {
           >
             <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 flex-shrink-0" />
             <span className="text-xs sm:text-sm font-medium">
-              <span className="text-yellow-400 font-bold">🎉 Score more than 50%</span>
-              <span className="text-slate-300"> and win </span>
-              <span className="text-yellow-400 font-bold">₨500</span>
+              <span className="text-yellow-400 font-bold">🎉 Score 50% or above</span>
+              <span className="text-slate-300"> to win </span>
+              <span className="text-yellow-400 font-bold">500 Rs</span>
               <span className="text-slate-500 text-xs ml-1">(special prize awaits!)</span>
             </span>
           </motion.div>
@@ -344,8 +344,8 @@ export default function LandingPage() {
                 <div>
                   <p className="text-yellow-400 font-bold text-sm">🎁 Special Surprise Awaits!</p>
                   <p className="text-slate-300 text-xs mt-1 leading-relaxed">
-                    Score more than <strong>50%</strong> in this mock test and win{" "}
-                    <strong className="text-yellow-400">₨500</strong> — a surprise prize for top performers!
+                    <strong>Score 50% or above</strong> in this mock test to win{" "}
+                    <strong className="text-yellow-400">500 Rs</strong> — a surprise prize for top performers!
                   </p>
                 </div>
               </div>
