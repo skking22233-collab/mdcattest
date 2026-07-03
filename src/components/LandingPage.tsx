@@ -126,14 +126,15 @@ export default function LandingPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
-            className="mt-8 inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 rounded-2xl bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 max-w-full"
+            className="mt-8 inline-flex items-center gap-3 sm:gap-4 px-5 sm:px-8 py-4 sm:py-5 rounded-2xl bg-gradient-to-r from-yellow-500/15 to-amber-500/15 border-2 border-yellow-500/30 max-w-full shadow-xl shadow-yellow-500/5"
           >
-            <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 flex-shrink-0" />
-            <span className="text-xs sm:text-sm font-medium">
-              <span className="text-yellow-400 font-bold">🎉 Score 50% or above</span>
-              <span className="text-slate-300"> to win </span>
-              <span className="text-yellow-400 font-bold">500 Rs</span>
-              <span className="text-slate-500 text-xs ml-1">(special prize awaits!)</span>
+            <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400 flex-shrink-0" />
+            <span className="text-sm sm:text-lg font-medium text-left">
+              <span className="text-yellow-400 font-bold block sm:inline">🎉 Score 50% or above</span>
+              <span className="text-slate-200 hidden sm:inline"> to win </span>
+              <span className="text-slate-200 sm:hidden"> win </span>
+              <span className="text-yellow-400 font-black text-lg sm:text-2xl">500 Rs</span>
+              <span className="text-slate-400 text-xs sm:text-sm block mt-0.5">(special prize awaits!)</span>
             </span>
           </motion.div>
         </motion.div>
@@ -339,13 +340,13 @@ export default function LandingPage() {
               </div>
 
               {/* Prize Alert */}
-              <div className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 rounded-2xl p-3 sm:p-4 mb-5 flex items-start gap-3">
-                <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+              <div className="bg-gradient-to-r from-yellow-500/15 to-amber-500/15 border border-yellow-500/30 rounded-2xl p-4 sm:p-5 mb-5 flex items-start gap-3 sm:gap-4 shadow-lg shadow-yellow-500/10">
+                <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-yellow-400 font-bold text-sm">🎁 Special Surprise Awaits!</p>
-                  <p className="text-slate-300 text-xs mt-1 leading-relaxed">
-                    <strong>Score 50% or above</strong> in this mock test to win{" "}
-                    <strong className="text-yellow-400">500 Rs</strong> — a surprise prize for top performers!
+                  <p className="text-yellow-400 font-black text-base sm:text-lg">🎁 Special Surprise Awaits!</p>
+                  <p className="text-slate-200 text-sm sm:text-base mt-1.5 leading-relaxed">
+                    <strong className="text-white">Score 50% or above</strong> in this mock test to win{" "}
+                    <strong className="text-yellow-400 text-base sm:text-xl">500 Rs</strong> — a surprise prize for top performers!
                   </p>
                 </div>
               </div>
