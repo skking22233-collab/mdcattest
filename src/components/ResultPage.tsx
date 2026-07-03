@@ -83,13 +83,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function ResultPage() {
-  const { studentName, finalScore, finalPercentage, subjectScores, answers, goToLanding, goToReview } = useTestStore();
+  const { studentName, finalScore, finalPercentage, subjectScores, answers, questions, goToLanding, goToReview } = useTestStore();
   const [animatedScore, setAnimatedScore] = useState(0);
   const [showCharts, setShowCharts] = useState(false);
   const motivation = getMotivationalMessage(finalPercentage);
   const passed = finalPercentage >= 50;
 
-  const totalQuestions = 180;
+  // Derive total from actual questions array — no hardcoded constant needed
+  const totalQuestions = questions.length || 90;
   const incorrectAnswers = totalQuestions - finalScore - (
     Object.values(answers).filter((a) => a.selectedOption === null || a.selectedOption === undefined).length
   );

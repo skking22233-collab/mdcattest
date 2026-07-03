@@ -107,7 +107,7 @@ export default function AnswerReviewPage() {
           <div className="flex items-center gap-2 text-xs sm:text-sm">
             <span className="text-slate-400">Score:</span>
             <span className={`font-bold ${finalPercentage >= 50 ? "text-emerald-400" : "text-rose-400"}`}>
-              {finalScore}/180 ({finalPercentage}%)
+              {finalScore}/{questions.length} ({finalPercentage}%)
             </span>
           </div>
         </div>

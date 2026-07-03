@@ -36,7 +36,7 @@ interface TestStore {
   currentQuestionIndex: number;
 
   // Timer
-  timeLeft: number; // seconds (3 hours = 10800)
+  timeLeft: number; // seconds (1.5 hours = 5400)
   timerActive: boolean;
 
   // Admin
@@ -127,7 +127,7 @@ export const useTestStore = create<TestStore>((set, get) => ({
   questions: [],
   answers: {},
   currentQuestionIndex: 0,
-  timeLeft: 10800, // 3 hours
+  timeLeft: 5400, // 1.5 hours
   timerActive: false,
   adminLoggedIn: false,
   surpriseSound: loadSurpriseSound(),
@@ -151,7 +151,7 @@ export const useTestStore = create<TestStore>((set, get) => ({
       questions,
       answers,
       currentQuestionIndex: 0,
-      timeLeft: 10800,
+      timeLeft: 5400,
       timerActive: true,
       currentPage: "test",
       finalScore: 0,
@@ -265,7 +265,7 @@ export const useTestStore = create<TestStore>((set, get) => ({
       questions: [],
       answers: {},
       currentQuestionIndex: 0,
-      timeLeft: 10800,
+      timeLeft: 5400,
       timerActive: false,
       finalScore: 0,
       finalPercentage: 0,

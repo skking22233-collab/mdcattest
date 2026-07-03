@@ -1,5 +1,5 @@
 // ============================================================
-// Test Interface - 180 MCQs with Navigation & Timer (Mobile Responsive)
+// Test Interface - 90 MCQs with Navigation & Timer (Mobile Responsive)
 // ============================================================
 
 import { useEffect, useRef, useState } from "react";
@@ -96,7 +96,7 @@ export default function TestInterface() {
   const flagged = Object.values(answers).filter((a) => a.flagged).length;
   const unanswered = questions.length - answered;
 
-  const timePercent = (timeLeft / 10800) * 100;
+  const timePercent = (timeLeft / 5400) * 100;
   const isLowTime = timeLeft < 1800; // 30 min
   const isCriticalTime = timeLeft < 600; // 10 min
 

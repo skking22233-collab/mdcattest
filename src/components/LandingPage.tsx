@@ -97,9 +97,9 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-slate-400 text-base sm:text-lg sm:text-xl max-w-2xl mx-auto mb-8 leading-relaxed px-2">
-            180 hand-picked, high-difficulty MCQs from{" "}
+            90 hand-picked, high-difficulty MCQs from{" "}
             <span className="text-white font-semibold">UHS, NUMS, KMU, SZABMU &amp; PMDC</span>{" "}
-            papers (2015–2025). 3-hour timed test. Real exam simulation.
+            past 5 years papers (2021–2025). 90-minute timed test. Real exam simulation.
           </p>
 
           {/* CTA Buttons */}
@@ -148,8 +148,8 @@ export default function LandingPage() {
         >
           {[
             { icon: BookOpen, label: "MCQs in Bank", value: "800+", color: "text-emerald-400" },
-            { icon: Clock, label: "Test Duration", value: "3 Hours", color: "text-cyan-400" },
-            { icon: Target, label: "Questions/Test", value: "180", color: "text-violet-400" },
+            { icon: Clock, label: "Test Duration", value: "90 Min", color: "text-cyan-400" },
+            { icon: Target, label: "Questions/Test", value: "90", color: "text-violet-400" },
             { icon: Users, label: "Students Tested", value: "12K+", color: "text-amber-400" },
           ].map(({ icon: Icon, label, value, color }) => (
             <div key={label} className="bg-white/5 border border-white/8 rounded-2xl p-3 sm:p-4 text-center">
@@ -249,7 +249,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {[
               { icon: Shield, title: "Official Pattern", desc: "MCQs from actual UHS, NUMS, KMU, SZABMU & PMDC papers (2015–2025).", color: "text-emerald-400" },
-              { icon: Clock, title: "Real Exam Timer", desc: "3-hour countdown with automatic submission. Exact exam simulation.", color: "text-cyan-400" },
+              { icon: Clock, title: "Real Exam Timer", desc: "90-minute countdown with automatic submission. Exact exam simulation.", color: "text-cyan-400" },
               { icon: BarChart2, title: "Detailed Analytics", desc: "Subject-wise breakdown with scores, percentages and visual charts.", color: "text-blue-400" },
               { icon: Target, title: "Ultra-Hard Difficulty", desc: "Only the hardest MCQs selected — designed to expose your weak areas.", color: "text-violet-400" },
               { icon: Brain, title: "Answer Review", desc: "After the test, review every question with correct answers highlighted.", color: "text-fuchsia-400" },
@@ -283,7 +283,7 @@ export default function LandingPage() {
           <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-3xl p-7 sm:p-10">
             <h2 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">Ready to Test Yourself?</h2>
             <p className="text-slate-400 text-sm sm:text-base mb-6 sm:mb-8">
-              180 questions. 3 hours. One chance to prove your knowledge.<br />
+              90 questions. 90 minutes. One chance to prove your knowledge.<br />
               Are you ready for the hardest MDCAT mock?
             </p>
             <motion.button
@@ -354,8 +354,8 @@ export default function LandingPage() {
               {/* Test Info */}
               <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-5">
                 {[
-                  { label: "Questions", value: "180" },
-                  { label: "Duration", value: "3 hrs" },
+                  { label: "Questions", value: "90" },
+                  { label: "Duration", value: "90 min" },
                   { label: "Passing", value: "50%" },
                 ].map(({ label, value }) => (
                   <div key={label} className="bg-white/5 rounded-xl p-2.5 sm:p-3 text-center">

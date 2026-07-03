@@ -351,7 +351,7 @@ function AdminDashboard() {
                             <p className={`font-bold text-base sm:text-lg ${student.percentage >= 50 ? "text-emerald-400" : "text-rose-400"}`}>
                               {student.percentage}%
                             </p>
-                            <p className="text-xs text-slate-500">{student.score}/180</p>
+                            <p className="text-xs text-slate-500">{student.score}/90</p>
                           </div>
                           <div className={`hidden sm:block px-2 py-1 rounded-lg text-xs font-semibold ${
                             student.percentage >= 50
@@ -636,9 +636,9 @@ function AdminDashboard() {
                   <h3 className="font-bold mb-3 sm:mb-4 text-slate-300 text-sm sm:text-base">Test Configuration</h3>
                   <div className="space-y-2.5 sm:space-y-3">
                     {[
-                      { label: "Total Questions", value: "180 MCQs" },
-                      { label: "Test Duration", value: "3 Hours (10800 seconds)" },
-                      { label: "Passing Score", value: "50% (90/180)" },
+                      { label: "Total Questions", value: "90 MCQs" },
+                      { label: "Test Duration", value: "90 Minutes (5400 seconds)" },
+                      { label: "Passing Score", value: "50% (45/90)" },
                       { label: "Prize Amount", value: "₨500 (display only)" },
                       { label: "Surprise Delay", value: "10s loading + 10s popup" },
                     ].map(({ label, value }) => (

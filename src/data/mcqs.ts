@@ -3215,23 +3215,35 @@ export const ALL_MCQS: MCQ[] = [
 
 // ============================================================
 // Test Generation Function - Strict Subject Weightage
+// 90 MCQs total (45% Bio, 25% Chem, 20% Phys, 5% Eng, 5% LR)
+// Prioritises past 5 years (2021-2025) MDCAT questions
 // ============================================================
 
+const PAST_5_YEARS = ["2021", "2022", "2023", "2024", "2025"];
+
 export function generateTest(): MCQ[] {
-  const distribution = {
-    "Biology": 81,
-    "Chemistry": 45,
-    "Physics": 36,
-    "English": 9,
-    "Logical Reasoning": 9,
+  const distribution: Record<string, number> = {
+    "Biology": 40,
+    "Chemistry": 22,
+    "Physics": 18,
+    "English": 5,
+    "Logical Reasoning": 5,
   };
 
   const result: MCQ[] = [];
 
   for (const [subject, count] of Object.entries(distribution)) {
-    const subjectMCQs = ALL_MCQS.filter((q) => q.subject === subject);
-    const shuffled = [...subjectMCQs].sort(() => Math.random() - 0.5);
-    // If we don't have enough, repeat from shuffled pool
+    const allSubjectMCQs = ALL_MCQS.filter((q) => q.subject === subject);
+
+    // Prefer past-5-year questions; fall back to full pool if insufficient
+    const recentMCQs = allSubjectMCQs.filter(
+      (q) => q.year && PAST_5_YEARS.includes(q.year)
+    );
+    const primaryPool = recentMCQs.length >= count ? recentMCQs : allSubjectMCQs;
+
+    const shuffled = [...primaryPool].sort(() => Math.random() - 0.5);
+
+    // Fill up if pool is smaller than required count
     let selected: MCQ[] = [];
     while (selected.length < count) {
       const needed = count - selected.length;
@@ -3255,9 +3267,9 @@ export const SUBJECT_COLORS: Record<Subject, string> = {
 };
 
 export const SUBJECT_DISTRIBUTION: Record<Subject, { count: number; percentage: number }> = {
-  Biology: { count: 81, percentage: 45 },
-  Chemistry: { count: 45, percentage: 25 },
-  Physics: { count: 36, percentage: 20 },
-  English: { count: 9, percentage: 5 },
-  "Logical Reasoning": { count: 9, percentage: 5 },
+  Biology: { count: 40, percentage: 45 },
+  Chemistry: { count: 22, percentage: 25 },
+  Physics: { count: 18, percentage: 20 },
+  English: { count: 5, percentage: 5 },
+  "Logical Reasoning": { count: 5, percentage: 5 },
 };

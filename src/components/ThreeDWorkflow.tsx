@@ -30,7 +30,7 @@ const STEPS: Step[] = [
     id: 1,
     title: "1. Quick Registration",
     subtitle: "Name & Guidelines",
-    description: "Enter your full name to start. No complicated signup. A 3-hour timer is initialized instantly.",
+    description: "Enter your full name to start. No complicated signup. A 90-minute timer is initialized instantly.",
     icon: UserPlus,
     color: "from-emerald-400 to-cyan-500",
     glowColor: "rgba(16, 185, 129, 0.2)",
@@ -39,7 +39,7 @@ const STEPS: Step[] = [
   {
     id: 2,
     title: "2. The Test Battleground",
-    subtitle: "180 Ultra-Hard MCQs",
+    subtitle: "90 Ultra-Hard MCQs",
     description: "Navigate through challenging questions. Flag doubtful questions for review and jump to any MCQ instantly.",
     icon: BookOpen,
     color: "from-blue-400 to-indigo-500",
@@ -50,7 +50,7 @@ const STEPS: Step[] = [
     id: 3,
     title: "3. Auto-Submit & Timer",
     subtitle: "Real-time Countdown",
-    description: "A strict 3-hour timer runs in the header. If time runs out, the test submits your responses automatically.",
+    description: "A strict 90-minute timer runs in the header. If time runs out, the test submits your responses automatically.",
     icon: Clock,
     color: "from-amber-400 to-orange-500",
     glowColor: "rgba(245, 158, 11, 0.2)",
@@ -253,7 +253,7 @@ export default function ThreeDWorkflow() {
                         Register & Start Test
                       </h4>
                       <p className="text-[10px] text-slate-500 mb-3 max-w-[200px]">
-                        Please enter your full name to generate UHS based 180 questions.
+                        Please enter your full name to generate UHS based 90 questions.
                       </p>
 
                       {/* Prize Badge Mini */}
@@ -297,7 +297,7 @@ export default function ThreeDWorkflow() {
                         <span className="font-bold text-emerald-400">MDCAT Mock Test</span>
                         <div className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded text-red-400 font-bold">
                           <Clock className="w-3 h-3" />
-                          <span>02:59:42</span>
+                          <span>01:29:42</span>
                         </div>
                       </div>
 
@@ -305,7 +305,7 @@ export default function ThreeDWorkflow() {
                       <div className="my-2 bg-white/5 border border-white/10 rounded-xl p-3">
                         <div className="flex justify-between items-center mb-1">
                           <span className="text-[9px] bg-blue-500/15 border border-blue-500/20 px-1.5 py-0.5 rounded text-blue-400 font-bold">
-                            Question 42 of 180
+                            Question 42 of 90
                           </span>
                           <span className="text-[9px] text-slate-500">Physics</span>
                         </div>
@@ -372,7 +372,7 @@ export default function ThreeDWorkflow() {
                         Time's Up! Submitting...
                       </h4>
                       <p className="text-[10px] text-slate-400 max-w-[220px] mb-4">
-                        The 3 hours countdown completed. The platform is automatically saving and submitting your test sheets securely.
+                        The 90-minute countdown completed. The platform is automatically saving and submitting your test sheets securely.
                       </p>
 
                       {/* Spinner */}
@@ -499,7 +499,7 @@ export default function ThreeDWorkflow() {
                           </div>
                         </div>
                         <div className="text-left">
-                          <p className="text-[13px] font-black text-white">151 / 180 Correct</p>
+                          <p className="text-[13px] font-black text-white">76 / 90 Correct</p>
                           <p className="text-[9px] text-slate-400 leading-normal">
                             Top 1% Percentile. You qualify for the ₨500 reward!
                           </p>
