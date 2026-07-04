@@ -4,6 +4,7 @@
 // Route "/admin" → Admin Panel (direct URL access)
 // ============================================================
 
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTestStore } from "./store/testStore";
@@ -59,6 +60,12 @@ function MainApp() {
 }
 
 export default function App() {
+  const fetchSurpriseSound = useTestStore((s) => s.fetchSurpriseSound);
+
+  useEffect(() => {
+    fetchSurpriseSound();
+  }, [fetchSurpriseSound]);
+
   return (
     <Routes>
       {/* Admin Panel — accessible only via /#/admin URL */}

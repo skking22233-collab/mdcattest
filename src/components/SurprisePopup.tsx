@@ -15,6 +15,7 @@ export default function SurprisePopup() {
   const [emojiIndex, setEmojiIndex] = useState(0);
   const [showText, setShowText] = useState(false);
   const [soundPlaying, setSoundPlaying] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     // Show text after brief delay
@@ -30,44 +31,8 @@ export default function SurprisePopup() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(countdownInterval);
-          // Countdown hit 0!
-          if (surpriseSound) {
-            setSoundPlaying(true);
-            try {
-              const audio = new Audio(surpriseSound);
-              audioRef.current = audio;
-              
-              // Boost volume (300% / 3x loud)
-              try {
-                const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-                if (AudioContextClass) {
-                  const ctx = new AudioContextClass();
-                  const source = ctx.createMediaElementSource(audio);
-                  const gainNode = ctx.createGain();
-                  gainNode.gain.value = 3.0; // 300% taiz volume
-                  source.connect(gainNode);
-                  gainNode.connect(ctx.destination);
-                }
-              } catch (err) {
-                // Ignore if AudioContext is not supported
-                audio.volume = 1.0;
-              }
-
-              audio.play().catch(() => {
-                // If browser blocks autoplay, navigate after 3 seconds fallback
-                setTimeout(() => {
-                  setCurrentPage("result");
-                }, 3000);
-              });
-              audio.onended = () => {
-                setCurrentPage("result");
-              };
-            } catch {
-              setCurrentPage("result");
-            }
-          } else {
-            setCurrentPage("result");
-          }
+          // Countdown hit 0! Show button instead of autoplaying to avoid mobile browser restrictions
+          setShowButton(true);
           return 0;
         }
         return prev - 1;
@@ -83,6 +48,46 @@ export default function SurprisePopup() {
       }
     };
   }, [setCurrentPage, surpriseSound]);
+
+  const handlePlaySurprise = () => {
+    if (surpriseSound) {
+      setSoundPlaying(true);
+      try {
+        const audio = new Audio(surpriseSound);
+        audioRef.current = audio;
+        
+        // Boost volume (300% / 3x loud)
+        try {
+          const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+          if (AudioContextClass) {
+            const ctx = new AudioContextClass();
+            const source = ctx.createMediaElementSource(audio);
+            const gainNode = ctx.createGain();
+            gainNode.gain.value = 3.0; // 300% taiz volume
+            source.connect(gainNode);
+            gainNode.connect(ctx.destination);
+          }
+        } catch (err) {
+          // Ignore if AudioContext is not supported
+          audio.volume = 1.0;
+        }
+
+        audio.play().catch(() => {
+          // If browser blocks autoplay, navigate after 3 seconds fallback
+          setTimeout(() => {
+            setCurrentPage("result");
+          }, 3000);
+        });
+        audio.onended = () => {
+          setCurrentPage("result");
+        };
+      } catch {
+        setCurrentPage("result");
+      }
+    } else {
+      setCurrentPage("result");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#050B18] flex items-center justify-center text-white overflow-hidden">
@@ -221,31 +226,41 @@ export default function SurprisePopup() {
 
           {/* Footer / Countdown */}
           <div className="px-8 pb-6 text-center">
-            <div className="text-xs text-slate-600 mb-3">
-              {soundPlaying ? "Result ke liye kuch second wait kijiye..." : "Result reveals automatically in..."}
-            </div>
-            <div className="relative h-2 bg-white/5 rounded-full overflow-hidden mb-3">
-              {soundPlaying ? (
-                <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 animate-pulse w-full" />
-              ) : (
-                <motion.div
-                  initial={{ width: "100%" }}
-                  animate={{ width: "0%" }}
-                  transition={{ duration: 10, ease: "linear" }}
-                  className="h-full rounded-full bg-gradient-to-r from-yellow-500 to-amber-500"
-                />
-              )}
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-4 h-4 border-2 border-yellow-500/30 border-t-yellow-500 rounded-full"
-              />
-              <span className="text-yellow-400 font-bold text-sm">
-                {soundPlaying ? "Playing... 🎵" : `${countdown}s`}
-              </span>
-            </div>
+            {showButton ? (
+              <motion.button
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                onClick={handlePlaySurprise}
+                disabled={soundPlaying}
+                className="w-full py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-yellow-500 to-amber-500 text-slate-900 shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-75 disabled:hover:scale-100"
+              >
+                {soundPlaying ? "Playing Surprise... 🎵" : "Tap to Reveal Surprise! 🎁"}
+              </motion.button>
+            ) : (
+              <>
+                <div className="text-xs text-slate-600 mb-3">
+                  Result reveals automatically in...
+                </div>
+                <div className="relative h-2 bg-white/5 rounded-full overflow-hidden mb-3">
+                  <motion.div
+                    initial={{ width: "100%" }}
+                    animate={{ width: "0%" }}
+                    transition={{ duration: 10, ease: "linear" }}
+                    className="h-full rounded-full bg-gradient-to-r from-yellow-500 to-amber-500"
+                  />
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-4 h-4 border-2 border-yellow-500/30 border-t-yellow-500 rounded-full"
+                  />
+                  <span className="text-yellow-400 font-bold text-sm">
+                    {countdown}s
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </motion.div>

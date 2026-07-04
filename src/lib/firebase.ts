@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -59,5 +59,68 @@ export const clearAllStudentsFromFirebase = async () => {
   } catch (e) {
     console.error("Error clearing students: ", e);
     return false;
+  }
+};
+
+// Global Sound Management using Firestore (chunking for large files)
+export const saveSurpriseSoundToFirebase = async (base64String: string | null) => {
+  try {
+    if (!base64String) {
+      await deleteDoc(doc(db, "settings", "surpriseSound"));
+      return true;
+    }
+
+    // Split into 800KB chunks (Firestore limit is 1MB per document)
+    const chunkSize = 800 * 1024;
+    const chunks = [];
+    for (let i = 0; i < base64String.length; i += chunkSize) {
+      chunks.push(base64String.substring(i, i + chunkSize));
+    }
+
+    // Save metadata
+    await setDoc(doc(db, "settings", "surpriseSound"), {
+      chunksCount: chunks.length,
+      timestamp: Date.now()
+    });
+
+    // Save chunks
+    const chunkPromises = chunks.map((chunkData, index) => 
+      setDoc(doc(db, "settings", `surpriseSound_chunk_${index}`), {
+        data: chunkData
+      })
+    );
+    await Promise.all(chunkPromises);
+    return true;
+  } catch (e) {
+    console.error("Error saving sound to Firebase:", e);
+    return false;
+  }
+};
+
+export const getSurpriseSoundFromFirebase = async () => {
+  try {
+    const metaDoc = await getDoc(doc(db, "settings", "surpriseSound"));
+    if (!metaDoc.exists()) return null;
+
+    const count = metaDoc.data().chunksCount;
+    let fullString = "";
+
+    // Fetch chunks sequentially or in parallel
+    const chunkPromises = [];
+    for (let i = 0; i < count; i++) {
+      chunkPromises.push(getDoc(doc(db, "settings", `surpriseSound_chunk_${i}`)));
+    }
+    
+    const chunkDocs = await Promise.all(chunkPromises);
+    for (const chunkDoc of chunkDocs) {
+      if (chunkDoc.exists()) {
+        fullString += chunkDoc.data().data;
+      }
+    }
+
+    return fullString || null;
+  } catch (e) {
+    console.error("Error fetching sound from Firebase:", e);
+    return null;
   }
 };

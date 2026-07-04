@@ -4,7 +4,7 @@
 
 import { create } from "zustand";
 import { MCQ, Subject, generateTest } from "../data/mcqs";
-import { saveStudentToFirebase, getStudentsFromFirebase, deleteStudentFromFirebase } from "../lib/firebase";
+import { saveStudentToFirebase, getStudentsFromFirebase, deleteStudentFromFirebase, saveSurpriseSoundToFirebase, getSurpriseSoundFromFirebase } from "../lib/firebase";
 
 export type AppPage = "landing" | "test" | "loading" | "surprise" | "result" | "review" | "admin";
 
@@ -65,6 +65,7 @@ interface TestStore {
   goToLanding: () => void;
   goToReview: () => void;
   fetchStudents: () => Promise<void>;
+  fetchSurpriseSound: () => Promise<void>;
 
   // Result
   finalScore: number;
@@ -240,6 +241,8 @@ export const useTestStore = create<TestStore>((set, get) => ({
       }
     } catch {}
     set({ surpriseSound: soundData });
+    // Save to firebase in background
+    saveSurpriseSoundToFirebase(soundData).catch(console.error);
   },
 
   deleteStudent: (id) => {
@@ -252,6 +255,14 @@ export const useTestStore = create<TestStore>((set, get) => ({
   fetchStudents: async () => {
     const students = await getStudentsFromFirebase();
     set({ students });
+  },
+
+  fetchSurpriseSound: async () => {
+    const soundData = await getSurpriseSoundFromFirebase();
+    if (soundData) {
+      try { localStorage.setItem("mdcat_surprise_sound", soundData); } catch {}
+      set({ surpriseSound: soundData });
+    }
   },
 
   // Go to review page (preserves questions & answers)
